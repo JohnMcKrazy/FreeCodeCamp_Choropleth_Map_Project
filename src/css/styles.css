@@ -10,36 +10,33 @@ HTML {
     --lightGray: rgb(180, 180, 180);
     --midGray: rgb(166, 166, 166);
     --darkGray: rgb(77, 77, 77);
-    --black: rgb(10, 10%, 10%);
-    --white: rgb(240, 240, 240);
-    --blackOff: rgb(38, 38, 38);
-    --whiteOff: rgb(217, 217, 217);
+    --blackOff: rgb(25, 25, 25);
+    --whiteOff: rgb(220, 220, 220);
     --midLight: rgb(128, 128, 128);
+    --firstColor: rgb(50, 185, 209);
+    --bgColor: var(--whiteOff);
+    --textColor: var(--blackOff);
     /*¿FONTS START  */
     /*¿ FONT SIZES--START */
-    --fontSizeXL: 5em;
-    --fontSizeL: 2.8em;
-    --fontSizeG: 1.8em;
-    --fontSizeN: 1.5em;
-    --fontSizeS: 1.2em;
+    --fontSizeL: 5em;
+    --fontSizeG: 2em;
+    --fontSizeN: 1em;
+    --fontSizeS: 0.8em;
     /*¿ FONT WEIGHT--START */
+    --fontWight_x_light: 200;
+    --fontWight_light: 300;
+    --fontWight_normal: 400;
+    --fontWight_bold: 700;
     /*¿TRANSITIONS--START */
     --transitionUF: all 250ms ease;
     --transitionF: all 500ms ease;
     --transitionM: all 750ms ease;
     --transitionS: all 1000ms ease;
-    /*¿PADDING */
-    --paddingXS: 0.25rem;
-    --paddingS: 0.5rem;
-    --paddingM: 1rem;
-    --paddingL: 1.5rem;
-    --paddingX: 2rem;
-    --paddingXX: 2.5rem;
     /*¿GENERAL START */
     width: 100%;
     height: 100vh;
-    --fontSize: 10px;
-    font-size: var(--fontSize);
+    font-size: 12px;
+    font-family: "Titillium Web", sans-serif;
     line-break: loose;
     letter-spacing: 0.15rem;
     line-height: 1;
@@ -48,6 +45,10 @@ HTML {
 /*! GENERAL PAGE */
 BODY {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     color: var(--textColor);
     background: var(--bgColor);
     margin: 0;
@@ -77,3 +78,21 @@ UL {
     list-style: none;
 }
 /*! PARTS */
+
+.map_title,
+.map_subtitle {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.map_title {
+    font-size: var(--fontSizeL);
+    font-weight: var(--fontWight_bold);
+    color: var(--firstColor);
+}
+.map_subtitle {
+    font-size: var(--fontSizeG);
+    font-weight: var(--fontWight_normal);
+}
