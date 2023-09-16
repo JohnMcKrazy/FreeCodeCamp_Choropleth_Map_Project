@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ^ CREATE TITLE ^ //
     titleSection.append("h1").attr("class", "map_title").attr("id", "title").html("United States Educational Attainment");
     // ^ CREATE SUBTITLE ^ //
-    titleSection.append("h2").attr("class", "map_subtitle").attr("id", "subtitle").html("Percentage of adults age 25 and older with a bachelor's degree or higher (2010-2014)");
+    titleSection.append("h2").attr("class", "map_subtitle").attr("id", "description").html("Percentage of adults age 25 and older with a bachelor's degree or higher (2010-2014)");
 
     // ^ CREATE MAP CONTAINER ^ //
     const mapSection = generalContainer.append("section", "map_section");
@@ -23,6 +23,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // ^ CREATE TOOLTIP ^ //
     const tooltip = body.append("div").attr("class", "tooltip").attr("id", "tooltip").style("opacity", 0);
 
+    tooltip
+        .append("h1")
+        .attr("id", "provisional")
+        .html(
+            `<h1 class="data_state"></h1>
+    <h2 class="data_countie"></h2>
+    <p class="data_education" data-education=""></p>`
+        );
+    /* const tooltip = document.querySelector(".tooltip"); */
+
+    const stateDataTip = document.querySelector(".data_state");
+    const countieDataTip = document.querySelector(".data_countie");
+    const educationDataTip = document.querySelector(".data_education");
     const generateTopoMap = (data, data_features) => {
         return topojson.feature(data, data_features).features;
     };
@@ -44,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const topoDataNation = generateTopoMap(rawDataCountry, objectDataCountries.nation);
         const topoDataStates = generateTopoMap(rawDataCountry, objectDataCountries.states);
         const topoDataCounties = generateTopoMap(rawDataCountry, objectDataCountries.counties);
-        console.log(topoDataCounties);
+        /* console.log(topoDataCounties); */
 
         /*  const minScale = 2.6;
         const maxScale = 75.1;
@@ -66,7 +79,58 @@ document.addEventListener("DOMContentLoaded", () => {
             purpleSchema: ["#efedf5", "#dadaeb", "#bcbddc", "#9e9ac8", "#807dba", "#6a51a3", "#54278f", "#3f007d"],
             orangeSchema: ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"],
         };
-
+        const statesList = {
+            AL: "Alabama",
+            AK: "Alaska",
+            AZ: "Arizona",
+            AR: "Arkansas",
+            CA: "California",
+            CO: "Colorado",
+            CT: "Connecticut",
+            DE: "Delaware",
+            FL: "Florida",
+            GA: "Georgia",
+            HI: "Hawaii",
+            ID: "Idaho",
+            IL: "Illinois",
+            IN: "Indiana",
+            IA: "Iowa",
+            KS: "Kansas",
+            KY: "Kentucky",
+            LA: "Louisiana",
+            ME: "Maine",
+            MD: "Maryland",
+            MA: "Massachusetts",
+            MI: "Michigan",
+            MN: "Minnesota",
+            MS: "Mississippi",
+            MO: "Missouri",
+            MT: "Montana",
+            NE: "Nebraska",
+            NV: "Nevada",
+            NH: "New Hampshire",
+            NJ: "New Jersey",
+            NM: "New Mexico",
+            NY: "New York",
+            NC: "North Carolina",
+            ND: "North Dakota",
+            OH: "Ohio",
+            OK: "Oklahoma",
+            OR: "Oregon",
+            PA: "Pennsylvania",
+            RI: "Rhode Island",
+            SC: "South Carolina",
+            SD: "South Dakota",
+            TN: "Tennessee",
+            TX: "Texas",
+            UT: "Utah",
+            VT: "Vermont",
+            VA: "Virginia",
+            WA: "Washington",
+            WV: "West Virginia",
+            WI: "Wisconsin",
+            WY: "Wyoming",
+        };
         /*  */
         const xScale = d3
             .scaleLinear()
@@ -92,9 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .selectAll("rect")
             .data(
                 colorThreshold.range().map((color) => {
-                    console.log(color);
+                    /* console.log(color); */
                     color = colorThreshold.invertExtent(color);
-                    console.log(color);
+                    /*  console.log(color); */
                     if (color[0] === null) {
                         color[0] = xScale.domain()[0];
                     }
@@ -154,6 +218,29 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("height", mapDimentions.mapHeight)
             .attr("width", mapDimentions.mapWidth)
             .attr("d", path)
+            .attr("transform", `translate(0,${mapDimentions.legendHeight})`)
+            .on("mouseenter", (e, data) => {
+                /* const positionData = rawDataCountry.filter((item) => item.id === data.id);
+                console.log(positionData); */
+                const tipData = rawDataEducation.filter((item) => item.fips === data.id);
+                tooltip
+                    .style("opacity", 1)
+                    .style("translate", `${e.clientX + 10}px ${e.clientY - 40}px`)
+                    .attr("data-education", tipData[0].bachelorsOrHigher);
+                stateDataTip.textContent = `${statesList[tipData[0].state]}`;
+                countieDataTip.textContent = `${tipData[0].area_name}`;
+                educationDataTip.textContent = `${tipData[0].bachelorsOrHigher}%`;
+            })
+            .on("mouseleave", () => {
+                tooltip.style("opacity", 0);
+            });
+
+        mapSVG
+            .append("path")
+            .datum(topojson.mesh(rawDataCountry, objectDataCountries.states, (a, b) => a !== b))
+            .attr("class", "states")
+            .attr("d", path)
+            .attr("id", "legend")
             .attr("transform", `translate(0,${mapDimentions.legendHeight})`);
     };
     fetchData();

@@ -7,13 +7,12 @@
 }
 HTML {
     /*¿GENERAL COLORS START */
-    --lightGray: rgb(180, 180, 180);
-    --midGray: rgb(166, 166, 166);
-    --darkGray: rgb(77, 77, 77);
-    --blackOff: rgb(25, 25, 25);
+    --blackOff: rgb(20, 20, 20);
     --whiteOff: rgb(220, 220, 220);
+    --accentColor: #b5179e;
     --midLight: rgb(128, 128, 128);
     --firstColor: rgb(50, 185, 209);
+    --bgTip: rgba(230, 230, 230, 0.6);
     --bgColor: var(--whiteOff);
     --textColor: var(--blackOff);
     /*¿FONTS START  */
@@ -28,10 +27,7 @@ HTML {
     --fontWight_normal: 400;
     --fontWight_bold: 700;
     /*¿TRANSITIONS--START */
-    --transitionUF: all 250ms ease;
-    --transitionF: all 500ms ease;
-    --transitionM: all 750ms ease;
-    --transitionS: all 1000ms ease;
+    --transition: all 400ms ease;
     /*¿GENERAL START */
     width: 100%;
     height: 100vh;
@@ -61,6 +57,23 @@ BODY {
     outline: 2px solid red;
     outline-offset: 0.1rem;
 }
+SVG,
+SVG *,
+.tooltip {
+    user-select: none;
+    pointer-events: none;
+}
+.data_state {
+    font-size: 2rem;
+    color: var(--textColor);
+}
+.data_countie {
+    font-size: 1.5rem;
+    color: var(--accentColor);
+}
+.data_education {
+    color: var(--textColor);
+}
 IMG {
     display: block;
 }
@@ -78,6 +91,19 @@ UL {
     list-style: none;
 }
 /*! PARTS */
+.tooltip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 1rem;
+    background: var(--bgTip);
+    border-radius: 0.25rem;
+}
+.states {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+}
 
 .map_title,
 .map_subtitle {
