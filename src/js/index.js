@@ -1,4 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const deleteChildElements = (parentElement) => {
+        let child = parentElement.lastElementChild;
+        while (child) {
+            parentElement.removeChild(child);
+            child = parentElement.lastElementChild;
+        }
+    };
+    const deleteArrElements = (parentElement) => {
+        while (parentElement.length > 0) {
+            parentElement.forEach((item) => {
+                parentElement.pop(item);
+            });
+        }
+    };
+    const selectActions = (status) => {
+        if (status === close) {
+            selectorState = open;
+            schemeBtnsContainer.style.display = "block";
+            arrow.style.rotate = "180deg";
+
+            /* console.log("Abriendo botones"); */
+            setTimeout(() => {
+                schemeBtnsContainer.style.opacity = 1;
+                schemeBtnsContainer.style.transform = "translate(-50%, 60px)";
+            }, 250);
+        } else if (status === open) {
+            selectorState = close;
+
+            arrow.style.rotate = "0deg";
+            schemeBtnsContainer.style.opacity = 0;
+            schemeBtnsContainer.style.transform = `translate(-50%, 0)`;
+            /* console.log("Cerrando botones"); */
+            setTimeout(() => {
+                schemeBtnsContainer.style.display = "none";
+            }, 250);
+        }
+    };
     // ! API LINKS ! //
     const educationUS = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
     const countyUS = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
@@ -8,17 +45,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // ^ BODY DECLARATION ^ //
     const body = d3.select("body");
     // ^ CREATE GENERAL CONTAINER ^ //
-    const generalContainer = body.append("div").attr("class", "general_container");
-
+    const generalContainer = document.querySelector(".general_container");
+    const selectorDropDown = document.querySelector(".btn_dropDown");
+    const schemeBtnsContainer = document.querySelector(".scheme_btns_container");
+    const schemeBtnTemplate = document.querySelector("#btn_scheme_template").content;
+    const arrow = document.querySelector("#arrow_svg");
     // ^ CREATE TITLE SECTION ^ //
-    const titleSection = generalContainer.append("section").attr("id", "title_section").style("padding", "20px 0 0 0");
+    const titleSection = d3.select(generalContainer).append("section").attr("id", "title_section").style("margin", "6rem 0 0");
     // ^ CREATE TITLE ^ //
     titleSection.append("h1").attr("class", "map_title").attr("id", "title").html("United States Educational Attainment");
     // ^ CREATE SUBTITLE ^ //
     titleSection.append("h2").attr("class", "map_subtitle").attr("id", "description").html("Percentage of adults age 25 and older with a bachelor's degree or higher (2010-2014)");
 
     // ^ CREATE MAP CONTAINER ^ //
-    const mapSection = generalContainer.append("section", "map_section");
+    const mapSection = d3.select(generalContainer).append("section").attr("class", "map_section");
 
     // ^ CREATE TOOLTIP ^ //
     const tooltip = body.append("div").attr("class", "tooltip").attr("id", "tooltip").style("opacity", 0);
@@ -40,98 +80,150 @@ document.addEventListener("DOMContentLoaded", () => {
         return topojson.feature(data, data_features).features;
     };
 
+    /* 
+        //^ DATES DATA  //
+        const yearsDate = basicData.map( (item)=> new Date(item[0]));
+        //^ DATES DATA MAX AND MIN  //
+        const xMax = new Date(d3.max(yearsDate));
+        const xMin = new Date(d3.min(yearsDate));
+ */
+
+    const close = "close";
+    const open = "open";
+    let selectorState = close;
+    const minScale = 2.6;
+    const maxScale = 75.1;
+    const scaleSteps = 8;
+    //!  //
+    const mapDimentions = {
+        mapWidth: 1000,
+        mapHeight: 600,
+        legendHeight: 50,
+    };
+
+    const colorScheme = [
+        {
+            name: "Neon",
+            type: "divergin",
+            colors: ["#F72585", "#B5179E", "#730e92", "#560BAD", "#480CA8", "#3F37C9", "#4895EF", "#4CC9F0"],
+        },
+        {
+            name: "Ashtetic",
+            type: "divergin",
+            colors: ["#B5179E", "#C448B6", "#D379CE", "#E2AAE6", "#F0DBFD", "#C7D7FA", "#9ED2F7", "#75CEF4"],
+        },
+        {
+            name: "Purple",
+            type: "linear",
+            colors: ["#efedf5", "#dadaeb", "#bcbddc", "#9e9ac8", "#807dba", "#6a51a3", "#54278f", "#3f007d"],
+        },
+        {
+            name: "Orange",
+            type: "linear",
+            colors: ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"],
+        },
+    ];
+    const mapFragment = document.createDocumentFragment();
+    /* console.log(colorScheme); */
+    colorScheme.forEach((scheme) => {
+        /* console.log(scheme); */
+        const cloneTemplate = schemeBtnTemplate.cloneNode(true);
+        let newBtn = cloneTemplate.querySelector(".btn_scheme");
+        newBtn.textContent = scheme.name;
+        newBtn.setAttribute("data-scheme", scheme.name);
+        /* console.log(scheme); */
+        if (scheme.type === "linear") {
+            document.querySelector(".linear_schemes").append(newBtn);
+        } else if (scheme.type === "divergin") {
+            document.querySelector(".divergin_schemes").append(newBtn);
+        }
+    });
+
+    setTimeout(() => {
+        const schemeBtns = document.querySelectorAll(".btn_scheme");
+        schemeBtns.forEach((btn) => {
+            const thisData = btn.getAttribute("data-scheme");
+            const newItem = colorScheme.filter((item) => item.name === thisData);
+            btn.addEventListener("click", () => {
+                deleteArrElements(mapFragment);
+                deleteChildElements(document.querySelector(".map_section"));
+                console.log(newItem[0].colors);
+                fetchData(newItem[0].colors);
+                selectActions(selectorState);
+            });
+        });
+    }, 250);
+    const statesList = {
+        AL: "Alabama",
+        AK: "Alaska",
+        AZ: "Arizona",
+        AR: "Arkansas",
+        CA: "California",
+        CO: "Colorado",
+        CT: "Connecticut",
+        DE: "Delaware",
+        FL: "Florida",
+        GA: "Georgia",
+        HI: "Hawaii",
+        ID: "Idaho",
+        IL: "Illinois",
+        IN: "Indiana",
+        IA: "Iowa",
+        KS: "Kansas",
+        KY: "Kentucky",
+        LA: "Louisiana",
+        ME: "Maine",
+        MD: "Maryland",
+        MA: "Massachusetts",
+        MI: "Michigan",
+        MN: "Minnesota",
+        MS: "Mississippi",
+        MO: "Missouri",
+        MT: "Montana",
+        NE: "Nebraska",
+        NV: "Nevada",
+        NH: "New Hampshire",
+        NJ: "New Jersey",
+        NM: "New Mexico",
+        NY: "New York",
+        NC: "North Carolina",
+        ND: "North Dakota",
+        OH: "Ohio",
+        OK: "Oklahoma",
+        OR: "Oregon",
+        PA: "Pennsylvania",
+        RI: "Rhode Island",
+        SC: "South Carolina",
+        SD: "South Dakota",
+        TN: "Tennessee",
+        TX: "Texas",
+        UT: "Utah",
+        VT: "Vermont",
+        VA: "Virginia",
+        WA: "Washington",
+        WV: "West Virginia",
+        WI: "Wisconsin",
+        WY: "Wyoming",
+    };
+
     // ! FETCH FUNCTION! //
-    const fetchData = async () => {
+    const fetchData = async (schemeColor) => {
         // & FETCH RAW DATA &//
         // ^ EDUCATION DATA ^ //
         const rawDataEducation = await d3.json(educationUS);
-        console.log(rawDataEducation);
+        /* console.log(rawDataEducation); */
 
         // ^ COUNTRY DATA ^ //
         const rawDataCountry = await d3.json(countyUS);
-        console.log(rawDataCountry);
+        /* console.log(rawDataCountry); */
         const objectDataCountries = rawDataCountry.objects;
-        console.log(objectDataCountries);
+        /* console.log(objectDataCountries); */
 
         const path = d3.geoPath();
         const topoDataNation = generateTopoMap(rawDataCountry, objectDataCountries.nation);
         const topoDataStates = generateTopoMap(rawDataCountry, objectDataCountries.states);
         const topoDataCounties = generateTopoMap(rawDataCountry, objectDataCountries.counties);
-        /* console.log(topoDataCounties); */
 
-        /*  const minScale = 2.6;
-        const maxScale = 75.1;
-        const scaleSteps = 8; */
-
-        const minScale = 2.6;
-        const maxScale = 75.1;
-        const scaleSteps = 8;
-        //!  //
-        const mapDimentions = {
-            mapWidth: 1000,
-            mapHeight: 600,
-            legendHeight: 50,
-        };
-
-        const colorScheme = {
-            neonScheme: ["#F72585", "#B5179E", "#730e92", "#560BAD", "#480CA8", "#3F37C9", "#4895EF", "#4CC9F0"],
-            astheticScheme: ["#B5179E", "#C448B6", "#D379CE", "#E2AAE6", "#F0DBFD", "#C7D7FA", "#9ED2F7", "#75CEF4"],
-            purpleSchema: ["#efedf5", "#dadaeb", "#bcbddc", "#9e9ac8", "#807dba", "#6a51a3", "#54278f", "#3f007d"],
-            orangeSchema: ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"],
-        };
-        const statesList = {
-            AL: "Alabama",
-            AK: "Alaska",
-            AZ: "Arizona",
-            AR: "Arkansas",
-            CA: "California",
-            CO: "Colorado",
-            CT: "Connecticut",
-            DE: "Delaware",
-            FL: "Florida",
-            GA: "Georgia",
-            HI: "Hawaii",
-            ID: "Idaho",
-            IL: "Illinois",
-            IN: "Indiana",
-            IA: "Iowa",
-            KS: "Kansas",
-            KY: "Kentucky",
-            LA: "Louisiana",
-            ME: "Maine",
-            MD: "Maryland",
-            MA: "Massachusetts",
-            MI: "Michigan",
-            MN: "Minnesota",
-            MS: "Mississippi",
-            MO: "Missouri",
-            MT: "Montana",
-            NE: "Nebraska",
-            NV: "Nevada",
-            NH: "New Hampshire",
-            NJ: "New Jersey",
-            NM: "New Mexico",
-            NY: "New York",
-            NC: "North Carolina",
-            ND: "North Dakota",
-            OH: "Ohio",
-            OK: "Oklahoma",
-            OR: "Oregon",
-            PA: "Pennsylvania",
-            RI: "Rhode Island",
-            SC: "South Carolina",
-            SD: "South Dakota",
-            TN: "Tennessee",
-            TX: "Texas",
-            UT: "Utah",
-            VT: "Vermont",
-            VA: "Virginia",
-            WA: "Washington",
-            WV: "West Virginia",
-            WI: "Wisconsin",
-            WY: "Wyoming",
-        };
-        /*  */
         const xScale = d3
             .scaleLinear()
             .domain([minScale, maxScale])
@@ -140,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const colorThreshold = d3
             .scaleThreshold()
             .domain(d3.range(minScale, maxScale, (maxScale - minScale) / scaleSteps))
-            .range(colorScheme.neonScheme);
+            .range(schemeColor);
 
         // ! CREATING SVG ! //
         // ^ CREATE MAP PATH ^ //
@@ -243,5 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("id", "legend")
             .attr("transform", `translate(0,${mapDimentions.legendHeight})`);
     };
-    fetchData();
+    fetchData(colorScheme[0].colors);
+
+    selectorDropDown.addEventListener("click", () => selectActions(selectorState));
 });

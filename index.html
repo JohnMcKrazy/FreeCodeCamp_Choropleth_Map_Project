@@ -25,7 +25,28 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+        <div class="general_container">
+            <button class="btn_dropDown" alt="">
+                Scheme Selector
+                <span class="icon_container">
+                    <svg class="icon_svg" id="arrow_svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="cls-1" d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                    </svg>
+                </span>
+            </button>
+            <div class="scheme_btns_container">
+                <div class="linear_schemes">
+                    <h1>Linear</h1>
+                </div>
+                <div class="divergin_schemes">
+                    <h1>Diverging</h1>
+                </div>
+            </div>
+        </div>
         <!-- !FREECODECAMP SCRIPT! -->
-        <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+        <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
     </body>
+    <template id="btn_scheme_template">
+        <button type="button" class="btn_scheme" alt="" data-value=""></button>
+    </template>
 </html>

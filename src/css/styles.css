@@ -91,13 +91,64 @@ UL {
     list-style: none;
 }
 /*! PARTS */
+BUTTON {
+    border: none;
+    background: none;
+}
+BUTTON:hover {
+    background: red;
+}
+.icon_container {
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+    margin-left: 0.5rem;
+}
 .tooltip {
     position: absolute;
     left: 0;
     top: 0;
     padding: 1rem;
     background: var(--bgTip);
+    border-radius: 0.5rem;
+    transition: opacity 100ms ease-in-out;
+}
+.btn_dropDown,
+.btn_scheme {
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+}
+.btn_dropDown {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, 0);
+    top: 2rem;
+
+    padding: 1rem 1.5rem;
+    width: 15rem;
+    background: rgb(240, 240, 240);
+    z-index: 5;
+}
+.scheme_btns_container {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 0;
+    width: fit-content;
+    height: fit-content;
+    transform: translate(-50%, 0);
+    background: var(--bgTip);
+    margin-top: 1rem;
+    padding: 0.5rem;
     border-radius: 0.25rem;
+    opacity: 0;
+    transition: all 250ms ease-in-out;
 }
 .states {
     fill: none;
@@ -121,4 +172,8 @@ UL {
 .map_subtitle {
     font-size: var(--fontSizeG);
     font-weight: var(--fontWight_normal);
+}
+
+#arrow_svg {
+    transition: all 100ms ease-in-out;
 }
