@@ -160,6 +160,20 @@ document.addEventListener("DOMContentLoaded", () => {
             type: "divergin",
             colors: ["#B5179E", "#C448B6", "#D379CE", "#E2AAE6", "#F0DBFD", "#C7D7FA", "#9ED2F7", "#75CEF4"],
         },
+        { name: "Red -  Blue", type: "divergin", colors: d3.schemeRdBu[9] },
+        { name: "Bronce -  Blue Green", type: "divergin", colors: d3.schemeBrBG[9] },
+        { name: "Purple -  Orange", type: "divergin", colors: d3.schemePuOr[9] },
+        { name: "Red - Yellow - Blue", type: "divergin", colors: d3.schemeRdYlBu[9] },
+        {
+            name: "Green",
+            type: "linear",
+            colors: d3.schemeGreens[9],
+        },
+        {
+            name: "Bluee",
+            type: "linear",
+            colors: d3.schemeBlues[9],
+        },
         {
             name: "Purple",
             type: "linear",
@@ -170,10 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
             type: "linear",
             colors: ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"],
         },
-        { name: "Red -  Blue", type: "divergin", colors: d3.schemeRdBu[9] },
-        { name: "Bronce -  Blue Green", type: "divergin", colors: d3.schemeBrBG[9] },
-        { name: "Purple -  Orange", type: "divergin", colors: d3.schemePuOr[9] },
-        { name: "Red - Yellow - Blue", type: "divergin", colors: d3.schemeRdYlBu[9] },
+        {
+            name: "Yellow - Green - Blue",
+            type: "linear",
+            colors: d3.schemeYlGnBu[9],
+        },
     ];
     const mapFragment = document.createDocumentFragment();
     /* console.log(colorScheme); */
