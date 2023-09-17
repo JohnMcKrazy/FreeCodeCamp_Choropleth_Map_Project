@@ -64,7 +64,8 @@ BODY {
 }
 SVG,
 SVG *,
-.tooltip {
+.tooltip,
+.tooltip * {
     user-select: none;
     pointer-events: none;
 }
@@ -136,10 +137,12 @@ BUTTON {
     border-radius: 0.5rem;
     transition: opacity 100ms ease-in-out;
 }
-/* .tooltip h1,
+
 .tooltip p {
-    color: var(--blackOff);
-} */
+    text-align: right;
+    margin-top: 0.5rem;
+    font-size: var(--fontSizeG);
+}
 .btn_dropDown,
 .btn_scheme {
     height: 3rem;
@@ -176,6 +179,7 @@ BUTTON {
     margin-left: 0.5rem;
 }
 .scheme_btns_container {
+    display: none;
     position: absolute;
     left: 50%;
     right: 50%;

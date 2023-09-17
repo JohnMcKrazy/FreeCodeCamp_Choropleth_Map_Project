@@ -391,8 +391,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const tipData = rawDataEducation.filter((item) => item.fips === data.id);
                 tooltip
                     .style("opacity", 1)
-                    .style("translate", `${e.clientX + 10}px ${e.clientY - 40}px`)
-                    .attr("data-education", tipData[0].bachelorsOrHigher);
+                    .attr("data-education", tipData[0].bachelorsOrHigher)
+                    .style("left", e.pageX + 10 + "px")
+                    .style("top", e.pageY + 10 + "px");
                 stateDataTip.textContent = `${statesList[tipData[0].state]}`;
                 countieDataTip.textContent = `${tipData[0].area_name}`;
                 educationDataTip.textContent = `${tipData[0].bachelorsOrHigher}%`;
