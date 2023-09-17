@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
             colors: d3.schemeGreens[9],
         },
         {
-            name: "Bluee",
+            name: "Blue",
             type: "linear",
             colors: d3.schemeBlues[9],
         },
