@@ -170,6 +170,10 @@ document.addEventListener("DOMContentLoaded", () => {
             type: "linear",
             colors: ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"],
         },
+        { name: "Red -  Blue", type: "divergin", colors: d3.schemeRdBu[9] },
+        { name: "Bronce -  Blue Green", type: "divergin", colors: d3.schemeBrBG[9] },
+        { name: "Purple -  Orange", type: "divergin", colors: d3.schemePuOr[9] },
+        { name: "Red - Yellow - Blue", type: "divergin", colors: d3.schemeRdYlBu[9] },
     ];
     const mapFragment = document.createDocumentFragment();
     /* console.log(colorScheme); */
