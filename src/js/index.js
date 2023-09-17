@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // ^ BODY DECLARATION ^ //
+    const pageBody = document.querySelector("BODY");
+    const btnTheme = document.querySelector("#btn_theme");
+    const btnThemeIconContainer = document.querySelector("#icon_theme_container");
+    const sun = `<svg class="sun_icon icon_extra_btn" id="sun_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="clr-1" d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></svg>`;
+    const moon = `<svg class="moon_icon icon_extra_btn" id="moon_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="clr-1" d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z"/></svg>`;
+    let currentTheme = "";
+    let currentIcon = "";
+    // ^ REMOVE ITEMS FUNCTIONS ^//
     const deleteChildElements = (parentElement) => {
         let child = parentElement.lastElementChild;
         while (child) {
@@ -13,6 +22,53 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     };
+
+    const lightT = "light_theme";
+    const darkT = "dark_theme";
+    // ^ SET THEME BY TIME ^ //
+    const checkTime = (tm) => {
+        //*console.log(time);
+        if (!tm) {
+            const date = new Date();
+            const time = date.getHours();
+            const isNight = time < 8 || time > 17;
+            switch (isNight) {
+                case true:
+                    currentTheme = darkT;
+                    currentIcon = sun;
+                    break;
+                case false:
+                    currentTheme = lightT;
+                    currentIcon = moon;
+                    break;
+                default:
+                    console.log("tienes un problema con tu funcion checkTime");
+                    return;
+            }
+
+            console.log(`Theme active by time: ${currentTheme}`);
+        } else {
+            switch (tm) {
+                case lightT:
+                    currentTheme = darkT;
+                    currentIcon = sun;
+                    break;
+
+                case darkT:
+                    currentTheme = lightT;
+                    currentIcon = moon;
+                    break;
+            }
+
+            console.log(`Theme active by click: ${currentTheme}`);
+        }
+        pageBody.className = currentTheme;
+        btnThemeIconContainer.innerHTML = currentIcon;
+    };
+    checkTime();
+
+    btnTheme.addEventListener("click", () => checkTime(currentTheme));
+
     const selectActions = (status) => {
         if (status === close) {
             selectorState = open;
@@ -42,8 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ! GLOBAL CONSTANTS ! //
     let currentTopoData;
-    // ^ BODY DECLARATION ^ //
-    const body = d3.select("body");
     // ^ CREATE GENERAL CONTAINER ^ //
     const generalContainer = document.querySelector(".general_container");
     const selectorDropDown = document.querySelector(".btn_dropDown");
@@ -61,16 +115,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const mapSection = d3.select(generalContainer).append("section").attr("class", "map_section");
 
     // ^ CREATE TOOLTIP ^ //
-    const tooltip = body.append("div").attr("class", "tooltip").attr("id", "tooltip").style("opacity", 0);
-
-    tooltip
-        .append("h1")
-        .attr("id", "provisional")
+    const tooltip = d3
+        .select(pageBody)
+        .append("div")
+        .attr("class", "tooltip")
+        .attr("id", "tooltip")
+        .style("opacity", 0)
         .html(
             `<h1 class="data_state"></h1>
-    <h2 class="data_countie"></h2>
-    <p class="data_education" data-education=""></p>`
+<h2 class="data_countie"></h2>
+<p class="data_education" data-education=""></p>`
         );
+
     /* const tooltip = document.querySelector(".tooltip"); */
 
     const stateDataTip = document.querySelector(".data_state");
@@ -79,14 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const generateTopoMap = (data, data_features) => {
         return topojson.feature(data, data_features).features;
     };
-
-    /* 
-        //^ DATES DATA  //
-        const yearsDate = basicData.map( (item)=> new Date(item[0]));
-        //^ DATES DATA MAX AND MIN  //
-        const xMax = new Date(d3.max(yearsDate));
-        const xMin = new Date(d3.min(yearsDate));
- */
 
     const close = "close";
     const open = "open";
@@ -103,12 +151,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const colorScheme = [
         {
-            name: "Neon",
+            name: "Pink - sky blue",
             type: "divergin",
             colors: ["#F72585", "#B5179E", "#730e92", "#560BAD", "#480CA8", "#3F37C9", "#4895EF", "#4CC9F0"],
         },
         {
-            name: "Ashtetic",
+            name: "Pink - Pale Blue",
             type: "divergin",
             colors: ["#B5179E", "#C448B6", "#D379CE", "#E2AAE6", "#F0DBFD", "#C7D7FA", "#9ED2F7", "#75CEF4"],
         },
@@ -145,11 +193,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const thisData = btn.getAttribute("data-scheme");
             const newItem = colorScheme.filter((item) => item.name === thisData);
             btn.addEventListener("click", () => {
-                deleteArrElements(mapFragment);
-                deleteChildElements(document.querySelector(".map_section"));
+                document.querySelector(".map").style.opacity = 0;
                 console.log(newItem[0].colors);
-                fetchData(newItem[0].colors);
                 selectActions(selectorState);
+                setTimeout(() => {
+                    deleteArrElements(mapFragment);
+                    deleteChildElements(document.querySelector(".map_section"));
+                    fetchData(newItem[0].colors);
+                }, 600);
             });
         });
     }, 250);
@@ -240,7 +291,11 @@ document.addEventListener("DOMContentLoaded", () => {
             .append("svg")
             .attr("class", "map")
             .attr("height", mapDimentions.mapHeight + mapDimentions.legendHeight)
-            .attr("width", mapDimentions.mapWidth);
+            .attr("width", mapDimentions.mapWidth)
+            .attr("opacity", 0);
+        setTimeout(() => {
+            mapSVG.attr("opacity", 1);
+        }, 250);
 
         const xAxesLabel = mapSVG.append("g").attr("class", "key").attr("id", "legend").attr("transform", "translate(0,40)");
 

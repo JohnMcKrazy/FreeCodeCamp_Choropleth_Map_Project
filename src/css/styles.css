@@ -12,9 +12,6 @@ HTML {
     --accentColor: #b5179e;
     --midLight: rgb(128, 128, 128);
     --firstColor: rgb(50, 185, 209);
-    --bgTip: rgba(230, 230, 230, 0.6);
-    --bgColor: var(--whiteOff);
-    --textColor: var(--blackOff);
     /*¿FONTS START  */
     /*¿ FONT SIZES--START */
     --fontSizeL: 5em;
@@ -53,9 +50,17 @@ BODY {
     height: 100vh;
     scroll-behavior: smooth;
 }
-:focus {
-    outline: 2px solid red;
-    outline-offset: 0.1rem;
+.light_theme {
+    --bgTip: rgba(230, 230, 230, 0.8);
+    --bgColor: var(--whiteOff);
+    --textColor: var(--blackOff);
+    --textContrastColor: var(--whiteOff);
+}
+.dark_theme {
+    --bgTip: rgba(20, 20, 20, 0.8);
+    --bgColor: var(--blackOff);
+    --textContrastColor: var(--blackOff);
+    --textColor: var(--whiteOff);
 }
 SVG,
 SVG *,
@@ -95,14 +100,32 @@ BUTTON {
     border: none;
     background: none;
 }
-BUTTON:hover {
-    background: red;
+/* ^ EXTRA - START */
+.btn_extra {
+    position: fixed;
+    right: 2rem;
+    top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    border: none;
+    border-radius: 0.5rem;
+    border: solid 1px var(--textColor);
+    fill: var(--textColor);
+}
+.btn_extra:hover {
+    background: var(--bgColor);
+    fill: var(--accentColor);
+    border: solid 1px var(--accentColor);
 }
 .icon_container {
-    display: inline-block;
     height: 2rem;
     width: 2rem;
-    margin-left: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .tooltip {
     position: absolute;
@@ -113,6 +136,10 @@ BUTTON:hover {
     border-radius: 0.5rem;
     transition: opacity 100ms ease-in-out;
 }
+/* .tooltip h1,
+.tooltip p {
+    color: var(--blackOff);
+} */
 .btn_dropDown,
 .btn_scheme {
     height: 3rem;
@@ -132,8 +159,21 @@ BUTTON:hover {
 
     padding: 1rem 1.5rem;
     width: 15rem;
-    background: rgb(240, 240, 240);
+    background: var(--bgColor);
+
+    border: solid 1px var(--textColor);
+    fill: var(--textColor);
+    color: var(--textColor);
     z-index: 5;
+}
+.btn_dropDown:hover {
+    border: solid 1px var(--accentColor);
+    background: var(--bgColor);
+    color: var(--textColor);
+    fill: var(--textColor);
+}
+.btn_dropDown .icon_container {
+    margin-left: 0.5rem;
 }
 .scheme_btns_container {
     position: absolute;
@@ -150,12 +190,27 @@ BUTTON:hover {
     opacity: 0;
     transition: all 250ms ease-in-out;
 }
-.states {
-    fill: none;
-    stroke: #fff;
-    stroke-linejoin: round;
+.scheme_btns_container {
+    text-align: center;
 }
-
+.scheme_btns_container h1 {
+    color: var(--accentColor);
+    width: 15rem;
+}
+.btn_scheme {
+    color: var(--textColor);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+.btn_scheme:hover {
+    border: solid 1px var(--accentColor);
+}
+.map_section {
+    transition: all 100ms ease-in-out;
+}
 .map_title,
 .map_subtitle {
     text-align: center;
@@ -174,6 +229,14 @@ BUTTON:hover {
     font-weight: var(--fontWight_normal);
 }
 
+.states {
+    fill: none;
+    stroke: var(--bgColor);
+    stroke-linejoin: round;
+}
+.map {
+    transition: all 500ms ease-in-out;
+}
 #arrow_svg {
     transition: all 100ms ease-in-out;
 }
