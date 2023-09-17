@@ -393,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     .style("opacity", 1)
                     .attr("data-education", tipData[0].bachelorsOrHigher)
                     .style("left", e.pageX + 10 + "px")
-                    .style("top", e.pageY + 10 + "px");
+                    .style("top", e.pageY - 100 + "px");
                 stateDataTip.textContent = `${statesList[tipData[0].state]}`;
                 countieDataTip.textContent = `${tipData[0].area_name}`;
                 educationDataTip.textContent = `${tipData[0].bachelorsOrHigher}%`;
