@@ -385,15 +385,17 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("width", mapDimentions.mapWidth)
             .attr("d", path)
             .attr("transform", `translate(0,${mapDimentions.legendHeight})`)
-            .on("mouseenter", (e, data) => {
+            .on("mouseover", (event, data) => {
                 /* const positionData = rawDataCountry.filter((item) => item.id === data.id);
                 console.log(positionData); */
+                /* console.log(event); */
                 const tipData = rawDataEducation.filter((item) => item.fips === data.id);
                 tooltip
                     .style("opacity", 1)
-                    .attr("data-education", tipData[0].bachelorsOrHigher)
-                    .style("left", e.pageX + 10 + "px")
-                    .style("top", e.pageY - 100 + "px");
+                    .style("left", event.pageX + 10 + "px")
+                    .style("top", event.pageY - 100 + "px")
+                    .attr("data-education", tipData[0].bachelorsOrHigher);
+
                 stateDataTip.textContent = `${statesList[tipData[0].state]}`;
                 countieDataTip.textContent = `${tipData[0].area_name}`;
                 educationDataTip.textContent = `${tipData[0].bachelorsOrHigher}%`;

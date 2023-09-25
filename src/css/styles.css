@@ -62,8 +62,8 @@ BODY {
     --textContrastColor: var(--blackOff);
     --textColor: var(--whiteOff);
 }
-SVG,
-SVG *,
+/* SVG,
+SVG *, */
 .tooltip,
 .tooltip * {
     user-select: none;
